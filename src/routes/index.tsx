@@ -72,7 +72,7 @@ function StoreProductPage() {
     return <main className="havan-page cart-page">
       <header className="havan-header"><div className="havan-header-inner">
         <button className="icon-button menu-button" aria-label="Menu" onClick={() => notify("Menu de categorias")}><Menu size={21}/></button>
-        <a className="havan-logo" href="#" onClick={(e) => { e.preventDefault(); setShowCart(false); }} aria-label="Havan">HAVAN</a>
+        <a className="havan-logo" href="#" onClick={(e) => { e.preventDefault(); setShowCart(false); }} aria-label="Havan"><img src={import.meta.env.BASE_URL + "logo-havan-custom.png"} alt="Havan" /></a>
         <form className="search-form" onSubmit={(e) => { e.preventDefault(); setShowCart(false); notify("Digite o produto que deseja buscar."); }}><input aria-label="Buscar na Havan" placeholder="Buscar na Havan"/><button aria-label="Buscar"><Search size={18}/></button></form>
         <button className="account-link" onClick={() => notify("Área de conta e cadastro")}><UserCircle size={21}/><span>Olá, entre na conta ou<br/> cadastre-se</span></button>
         <button className="cart-link" onClick={() => notify(`Seu carrinho tem ${cartCount} item(ns).`)} aria-label="Carrinho"><ShoppingCart size={22}/>{cartCount > 0 && <b>{cartCount}</b>}</button>
@@ -120,7 +120,7 @@ function StoreProductPage() {
   return <main className="havan-page">
     <header className="havan-header"><div className="havan-header-inner">
       <button className="icon-button menu-button" aria-label="Menu" onClick={() => notify("Menu de categorias")}><Menu size={21}/></button>
-      <a className="havan-logo" href="#" aria-label="Havan">HAVAN</a>
+      <a className="havan-logo" href="#" aria-label="Havan"><img src={import.meta.env.BASE_URL + "logo-havan-custom.png"} alt="Havan" /></a>
       <form className="search-form" onSubmit={(e) => { e.preventDefault(); notify("Busca pronta para conectar ao catálogo."); }}><input aria-label="Buscar na Havan" placeholder="Buscar na Havan"/><button aria-label="Buscar"><Search size={18}/></button></form>
       <button className="account-link" onClick={() => notify("Área de conta e cadastro")}><UserCircle size={21}/><span>Olá, entre na conta ou<br/> cadastre-se</span></button>
       <button className="cart-link" onClick={() => { if (cartCount > 0) setShowCart(true); else notify("Seu carrinho está vazio."); }} aria-label="Carrinho"><ShoppingCart size={22}/>{cartCount > 0 && <b>{cartCount}</b>}</button>
