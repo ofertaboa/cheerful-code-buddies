@@ -109,3 +109,82 @@ button:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
 }
 @media(max-width:365px){.top-action:first-of-type{display:none}.sign-title strong{font-size:21px}.sign-title span{font-size:24px}.hero-sign{min-height:480px}.chef-stage{height:295px}.chef-portrait{height:270px}.chef-face{font-size:125px}.steak-art{font-size:78px}.bet-controls button{width:24px}.prize-cell strong{font-size:10px}.feature-tile small{font-size:5px}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition-duration:.01ms!important}}
+
+
+/* A arte enviada pelo usuário é o design integral da página: não recriar nem redesenhar. */
+.original-design-page {
+  min-height: 100vh;
+  padding: 0 0 24px;
+  background: #160b06;
+}
+.original-artboard {
+  position: relative;
+  width: 100%;
+  max-width: 853px;
+  margin: 0 auto;
+  line-height: 0;
+}
+.original-design-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+.image-hotspot {
+  position: absolute;
+  display: block;
+  z-index: 2;
+  padding: 0;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  line-height: normal;
+  -webkit-tap-highlight-color: transparent;
+}
+.image-hotspot:focus-visible {
+  outline: 3px solid #fff3a0;
+  outline-offset: -4px;
+  background: #ffffff12;
+}
+.play-hotspot {
+  left: 28.2%;
+  top: 80.8%;
+  width: 44.5%;
+  height: 6.1%;
+  border-radius: 38px;
+}
+.bet-minus-hotspot {
+  left: 7.2%;
+  top: 91.5%;
+  width: 8.4%;
+  height: 4.8%;
+}
+.bet-plus-hotspot {
+  left: 30.7%;
+  top: 91.5%;
+  width: 8.4%;
+  height: 4.8%;
+}
+.amount-overlay {
+  position: absolute;
+  z-index: 1;
+  left: 16.8%;
+  top: 92.3%;
+  width: 13.2%;
+  height: 3.4%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  color: #ffdc22;
+  background: #17120f;
+  font: 900 clamp(9px, 2.6vw, 22px)/1 Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+  white-space: nowrap;
+  pointer-events: none;
+}
+@media (min-width: 854px) {
+  .amount-overlay { font-size: 22px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .image-hotspot { transition: none !important; }
+}
