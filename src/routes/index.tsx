@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { Check, Flame, Trophy, X } from "lucide-react";
 
@@ -15,24 +15,44 @@ export const Route = createFileRoute("/")({
 function Index() {
   const [amount, setAmount] = useState(1);
   const [modal, setModal] = useState<{ title: string; body: string } | null>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [animationKey, setAnimationKey] = useState(0);
+  const [showToast, setShowToast] = useState(false);
   const money = (value: number) =>
     value.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-  const handlePlay = () =>
-    setModal({
-      title: "Bora jogar! 🔥",
-      body: "Você selecionou uma aposta de R$ " + money(amount) + ". Esta é uma demonstração visual; não há apostas, pagamentos ou prêmios reais conectados.",
-    });
+  useEffect(() => {
+    if (!isPlaying) return;
+    const timer = window.setTimeout(() => setIsPlaying(false), 1900);
+    return () => window.clearTimeout(timer);
+  }, [isPlaying, animationKey]);
+
+  useEffect(() => {
+    if (!showToast) return;
+    const timer = window.setTimeout(() => setShowToast(false), 2600);
+    return () => window.clearTimeout(timer);
+  }, [showToast, animationKey]);
+
+  const handlePlay = () => {
+    setAnimationKey((value) => value + 1);
+    setIsPlaying(true);
+    setShowToast(true);
+  };
 
   return (
     <main className="original-design-page">
-      <div className="original-artboard">
+      <div className={`original-artboard ${isPlaying ? "is-playing" : ""}`}>
         <img
           className="original-design-image"
           src={import.meta.env.BASE_URL + "snakewin-original.jpeg"}
           alt="Arte original SnakeWin: É mês de churrasco, entra o grosso; chef com picanha, botão Jogar e painel de aposta."
           fetchPriority="high"
         />
+        {isPlaying && (
+          <div className="steak-flame-burst" key={animationKey} aria-hidden="true">
+            <span>🔥</span><span>✨</span><span>🔥</span><span>💥</span><span>✨</span>
+          </div>
+        )}
         <button className="image-hotspot play-hotspot" onClick={handlePlay} aria-label="Jogar">
           <span className="sr-only">Jogar</span>
         </button>
@@ -48,6 +68,13 @@ function Index() {
           aria-label="Aumentar aposta"
         />
       </div>
+
+      {showToast && (
+        <div className="play-toast" role="status">
+          <Flame size={20} />
+          <span><strong>PICANHA NA BRASA!</strong><small> Animação demonstrativa • R$ {money(amount)}</small></span>
+        </div>
+      )}
 
       {modal && (
         <div className="grill-modal-backdrop" role="presentation" onMouseDown={(event) => {
