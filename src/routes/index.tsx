@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { Menu, Search, MapPin, UserCircle, ShoppingCart, Star, ChevronRight, ChevronDown, Heart, ArrowRight, Minus, Plus, FileText, BookOpen, MessageSquare, Store, CircleDollarSign, Accessibility, Check, X, CreditCard } from "lucide-react";
+import { Menu, Search, MapPin, UserCircle, ShoppingCart, Star, ChevronRight, ChevronDown, Heart, ArrowRight, Minus, Plus, FileText, BookOpen, MessageSquare, Store, CircleDollarSign, Accessibility, Check, X, CreditCard, Truck, Tag, Trash2 } from "lucide-react";
 
 export const Route = createFileRoute("/")({
   head: () => ({ meta: [
@@ -54,12 +54,68 @@ function StoreProductPage() {
   const [cep, setCep] = useState("");
   const [favorite, setFavorite] = useState(false);
   const [cartCount, setCartCount] = useState(0);
+  const [showCart, setShowCart] = useState(false);
+  const [couponOpen, setCouponOpen] = useState(false);
+  const [coupon, setCoupon] = useState("");
+  const [couponApplied, setCouponApplied] = useState(false);
   const [notice, setNotice] = useState("");
   const [expanded, setExpanded] = useState<"details" | "specs" | null>(null);
   const [activeThumb, setActiveThumb] = useState(0);
   const notify = (message: string) => setNotice(message);
-  const addToCart = () => { setCartCount((n) => n + quantity); notify(`${quantity} item(ns) adicionado(s) ao carrinho.`); };
+  const addToCart = () => { setCartCount((n) => n + quantity); setShowCart(true); notify("Adicionado ao carrinho!"); };
   const formatCep = (value: string) => value.replace(/\D/g, "").slice(0, 8).replace(/(\d{5})(\d)/, "$1-$2");
+
+
+  if (showCart) {
+    const total = 149.90 * cartCount;
+    const money = (value: number) => value.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+    return <main className="havan-page cart-page">
+      <header className="havan-header"><div className="havan-header-inner">
+        <button className="icon-button menu-button" aria-label="Menu" onClick={() => notify("Menu de categorias")}><Menu size={21}/></button>
+        <a className="havan-logo" href="#" onClick={(e) => { e.preventDefault(); setShowCart(false); }} aria-label="Havan">HAVAN</a>
+        <form className="search-form" onSubmit={(e) => { e.preventDefault(); setShowCart(false); notify("Digite o produto que deseja buscar."); }}><input aria-label="Buscar na Havan" placeholder="Buscar na Havan"/><button aria-label="Buscar"><Search size={18}/></button></form>
+        <button className="account-link" onClick={() => notify("Área de conta e cadastro")}><UserCircle size={21}/><span>Olá, entre na conta ou<br/> cadastre-se</span></button>
+        <button className="cart-link" onClick={() => notify(`Seu carrinho tem ${cartCount} item(ns).`)} aria-label="Carrinho"><ShoppingCart size={22}/>{cartCount > 0 && <b>{cartCount}</b>}</button>
+      </div></header>
+      <div className="delivery-strip"><div className="cart-container"><MapPin size={14}/><strong>Enviar para</strong><span>Digite o CEP</span></div></div>
+      <div className="cart-container cart-content">
+        <h1 className="cart-heading">Meu carrinho <span>({cartCount})</span></h1>
+        <div className="cart-layout">
+          <section className="cart-left">
+            {cartCount > 0 ? <article className="cart-item">
+              <button className="cart-check" aria-label="Produto selecionado"><Check size={14}/></button>
+              <div className="cart-product-thumb"><VacuumArt compact/></div>
+              <div className="cart-item-name"><span>Aspirador De Pó Vertical Wap Power Speed Max 3 em 1 1600W</span><button onClick={() => notify("Voltagem selecionada: " + voltage)}>{voltage} <FileText size={13}/></button></div>
+              <div className="cart-quantity"><button aria-label="Diminuir quantidade" onClick={() => setCartCount((n) => Math.max(1, n - 1))}><Minus size={13}/></button><b>{cartCount}</b><button aria-label="Aumentar quantidade" onClick={() => setCartCount((n) => Math.min(99, n + 1))}><Plus size={13}/></button></div>
+              <div className="cart-item-price"><del>R$ 299,90</del><strong>{money(149.90 * cartCount)}</strong></div>
+              <button className="cart-remove" aria-label="Remover produto" onClick={() => { setCartCount(0); notify("Produto removido do carrinho."); }}><Trash2 size={15}/></button>
+              <button className="cart-change" aria-label="Editar produto" onClick={() => { setShowCart(false); notify("Você pode alterar as opções do produto."); }}><FileText size={15}/></button>
+            </article> : <div className="cart-empty"><ShoppingCart size={32}/><h2>Seu carrinho está vazio</h2><p>Adicione produtos para continuar suas compras.</p><button onClick={() => setShowCart(false)}>Continuar comprando</button></div>}
+            {cartCount > 0 && <button className="clear-cart" onClick={() => { setCartCount(0); notify("Carrinho limpo."); }}><Trash2 size={15}/> Limpar carrinho</button>}
+          </section>
+          <aside className="cart-right">
+            <section className="cart-summary">
+              <span className="summary-label">Valor Total</span><strong className="summary-total">{money(total)}</strong>
+              <div className="summary-line"><span>Produtos</span><span>{money(total)}</span></div>
+              <button className="coupon-toggle" onClick={() => setCouponOpen((v) => !v)}>Tem um cupom? <Tag size={15}/></button>
+              {couponOpen && <form className="coupon-form" onSubmit={(e) => { e.preventDefault(); if (coupon.trim().length >= 4) { setCouponApplied(true); notify("Cupom registrado para validação no checkout."); } else notify("Digite um cupom com pelo menos 4 caracteres."); }}><input value={coupon} onChange={(e) => { setCoupon(e.target.value.toUpperCase()); setCouponApplied(false); }} placeholder="Código do cupom" aria-label="Código do cupom"/><button>Aplicar</button>{couponApplied && <small>Cupom informado: {coupon}</small>}</form>}
+              <button className="continue-checkout" disabled={cartCount === 0} onClick={() => notify("Próxima etapa: identificação e endereço de entrega. O checkout ainda precisa ser conectado a um sistema de pedidos.")}>Continuar <ArrowRight size={19}/></button>
+            </section>
+            <h2 className="delivery-title">Formas de entrega</h2>
+            <section className="cart-delivery">
+              <p>Calcule frete, prazo de entrega e retirada</p>
+              <form className="cart-cep-form" onSubmit={(e) => { e.preventDefault(); notify(cep.replace(/\D/g, "").length === 8 ? `CEP ${cep} informado. Para mostrar prazo e frete é necessário conectar o serviço de entrega.` : "Informe um CEP válido com 8 dígitos."); }}><input value={cep} onChange={(e) => setCep(formatCep(e.target.value))} placeholder="CEP" aria-label="CEP" inputMode="numeric" maxLength={9}/></form>
+              <button className="unknown-cep" onClick={() => notify("Consulte seu CEP no site dos Correios.")}>Não sei meu CEP</button>
+              <div className="delivery-method"><Truck size={18}/><div><strong>Receber no endereço</strong><p>Não temos opções de envio para o CEP informado</p></div></div>
+              <div className="delivery-method pickup"><Store size={17}/><div><strong>Retirar na loja</strong><p>Informe o seu CEP para consultar as lojas disponíveis</p></div><span className="free-pill">Grátis</span></div>
+            </section>
+          </aside>
+        </div>
+      </div>
+      <footer className="havan-footer cart-footer"><div className="footer-legal"><a href="#privacy">Políticas e segurança</a><span>✦ Acessibilidade</span><a href="#lgpd">LGPD</a><span>Todos os direitos reservados</span><span>Havan Labs © 1986 - 2026 · Brusque, SC</span></div></footer>
+      {notice && <div className="store-toast cart-toast" role="status"><Check size={18}/><span>{notice}</span><button onClick={() => setNotice("")} aria-label="Fechar aviso"><X size={16}/></button><button className="toast-view-cart" onClick={() => setNotice("")}>Ver carrinho</button></div>}
+    </main>;
+  }
 
   return <main className="havan-page">
     <header className="havan-header"><div className="havan-header-inner">
@@ -67,7 +123,7 @@ function StoreProductPage() {
       <a className="havan-logo" href="#" aria-label="Havan">HAVAN</a>
       <form className="search-form" onSubmit={(e) => { e.preventDefault(); notify("Busca pronta para conectar ao catálogo."); }}><input aria-label="Buscar na Havan" placeholder="Buscar na Havan"/><button aria-label="Buscar"><Search size={18}/></button></form>
       <button className="account-link" onClick={() => notify("Área de conta e cadastro")}><UserCircle size={21}/><span>Olá, entre na conta ou<br/> cadastre-se</span></button>
-      <button className="cart-link" onClick={() => notify(`Seu carrinho tem ${cartCount} item(ns).`)} aria-label="Carrinho"><ShoppingCart size={22}/>{cartCount > 0 && <b>{cartCount}</b>}</button>
+      <button className="cart-link" onClick={() => { if (cartCount > 0) setShowCart(true); else notify("Seu carrinho está vazio."); }} aria-label="Carrinho"><ShoppingCart size={22}/>{cartCount > 0 && <b>{cartCount}</b>}</button>
     </div></header>
     <div className="delivery-strip"><div className="store-container"><MapPin size={14}/><strong>Enviar para</strong><span>Digite o CEP</span></div></div>
     <div className="store-container">
