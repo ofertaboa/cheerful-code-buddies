@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { Check, Flame, Trophy, X } from "lucide-react";
+import { Flame } from "lucide-react";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -14,7 +14,6 @@ export const Route = createFileRoute("/")({
 
 function Index() {
   const [amount, setAmount] = useState(1);
-  const [modal, setModal] = useState<{ title: string; body: string } | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [animationKey, setAnimationKey] = useState(0);
   const [showToast, setShowToast] = useState(false);
@@ -76,23 +75,6 @@ function Index() {
         </div>
       )}
 
-      {modal && (
-        <div className="grill-modal-backdrop" role="presentation" onMouseDown={(event) => {
-          if (event.target === event.currentTarget) setModal(null);
-        }}>
-          <section className="grill-modal" role="dialog" aria-modal="true" aria-labelledby="grill-modal-title">
-            <button className="grill-modal-close" aria-label="Fechar" onClick={() => setModal(null)}>
-              <X size={19} />
-            </button>
-            <div className="grill-modal-icon"><Trophy size={28} /></div>
-            <h2 id="grill-modal-title">{modal.title}</h2>
-            <p>{modal.body}</p>
-            <button className="grill-modal-action" onClick={() => setModal(null)}>
-              <Check size={17} /> Entendi
-            </button>
-          </section>
-        </div>
-      )}
     </main>
   );
 }
