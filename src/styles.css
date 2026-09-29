@@ -39,3 +39,9 @@
 .cart-page .delivery-strip>.cart-container>strong{display:inline-block;flex:0 0 auto;margin:0;color:#34455d;font-size:10px;font-weight:600;line-height:1}
 .cart-page .delivery-strip>.cart-container>span{display:inline-block;flex:0 0 auto;margin:0;color:#7f92ae;font-size:10px;line-height:1}
 @media(max-width:480px){.cart-page .delivery-strip>.cart-container{width:calc(100% - 20px);gap:6px}}
+
+/* Use the exact logo image supplied by the user; keep header layout unchanged */
+.havan-logo{display:flex;align-items:center;justify-content:center;text-shadow:none}
+.havan-logo img{display:block;width:auto;height:28px;max-width:155px;object-fit:contain}
+@media(max-width:680px){.havan-logo img{height:23px;max-width:130px}}
+@media(max-width:390px){.havan-logo img{height:21px;max-width:116px}}
