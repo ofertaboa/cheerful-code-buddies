@@ -273,3 +273,127 @@ button:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
   .steak-flame-burst span,
   .play-toast { animation-duration: .01ms !important; }
 }
+
+
+/* Functional arcade layer over the user's original art. */
+.game-hud {
+  position: absolute;
+  z-index: 5;
+  top: 1.5%;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(5px, 1.5vw, 14px);
+  width: max-content;
+  max-width: 94%;
+  padding: clamp(5px, 1.1vw, 10px) clamp(7px, 1.8vw, 16px);
+  border: 2px solid #ffd638;
+  border-radius: 14px;
+  color: #fff5d5;
+  background: linear-gradient(145deg, #5a210bF2, #180904F5);
+  box-shadow: 0 4px 15px #0008, inset 0 0 0 1px #a85c1c;
+  font-family: system-ui, sans-serif;
+  line-height: 1.1;
+}
+.game-hud-stat {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  min-width: 0;
+  color: #ffda32;
+}
+.game-hud-stat span { display: flex; flex-direction: column; gap: 3px; }
+.game-hud-stat small { font-size: clamp(7px, 1.3vw, 10px); font-weight: 900; letter-spacing: .5px; }
+.game-hud-stat b { color: #fff; font-size: clamp(11px, 2.2vw, 18px); font-variant-numeric: tabular-nums; }
+.steak-target {
+  position: absolute;
+  z-index: 8;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: clamp(47px, 9vw, 76px);
+  height: clamp(47px, 9vw, 76px);
+  padding: 0;
+  border: 2px solid #ffe23b;
+  border-radius: 50%;
+  background: radial-gradient(circle, #7e2509F2, #250900F5);
+  box-shadow: 0 0 0 4px #ffce3d35, 0 0 22px #ff8b22, inset 0 0 8px #ffdb4d;
+  font-size: clamp(27px, 5vw, 42px);
+  line-height: 1;
+  cursor: crosshair;
+  touch-action: manipulation;
+  animation: steak-target-appear .2s cubic-bezier(.2,.9,.2,1.3) both, steak-target-float 1.1s ease-in-out infinite alternate;
+}
+.steak-target span {
+  position: absolute;
+  right: -9px;
+  top: -9px;
+  padding: 3px 5px;
+  border-radius: 8px;
+  color: #391404;
+  background: #ffdf32;
+  border: 1px solid #fff2a4;
+  font: 900 10px/1 system-ui, sans-serif;
+}
+.steak-target:active { scale: .82; }
+.game-reset {
+  position: absolute;
+  z-index: 6;
+  right: 1.5%;
+  top: 1.7%;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 7px 9px;
+  border: 1px solid #ffda42;
+  border-radius: 10px;
+  color: #fff0c3;
+  background: #2b1009eF;
+  font: 800 clamp(8px, 1.5vw, 11px)/1 system-ui, sans-serif;
+  cursor: pointer;
+}
+.game-reset:hover { background: #6c2b0b; }
+.play-hotspot:disabled { cursor: default; }
+.image-hotspot:disabled { pointer-events: none; }
+.toast-close {
+  display: grid;
+  place-items: center;
+  padding: 4px;
+  border: 0;
+  border-radius: 50%;
+  color: #ffe7b8;
+  background: transparent;
+  cursor: pointer;
+}
+.play-toast { padding-right: 9px; }
+.virtual-credits-note {
+  margin: 0 auto;
+  padding: 0 12px 16px;
+  color: #c9b8a4;
+  font: 11px/1.5 system-ui, sans-serif;
+  text-align: center;
+}
+@keyframes steak-target-appear {
+  from { opacity: 0; scale: .25; rotate: -18deg; }
+  to { opacity: 1; scale: 1; rotate: 0; }
+}
+@keyframes steak-target-float {
+  from { translate: 0 -4px; }
+  to { translate: 0 4px; }
+}
+@media(max-width:520px) {
+  .game-hud { top: 1.1%; gap: 6px; padding: 5px 7px; border-radius: 10px; }
+  .game-hud-stat { gap: 3px; }
+  .game-hud-stat svg { width: 13px; height: 13px; }
+  .game-reset { top: 8%; right: 2%; padding: 6px 7px; }
+  .steak-target { width: 48px; height: 48px; font-size: 27px; }
+  .steak-target span { font-size: 9px; }
+  .virtual-credits-note { font-size: 10px; }
+}
+@media(prefers-reduced-motion:reduce) {
+  .steak-target { animation: none !important; }
+}
